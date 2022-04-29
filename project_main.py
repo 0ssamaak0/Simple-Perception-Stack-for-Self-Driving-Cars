@@ -1,4 +1,5 @@
 # relevant imports
+from tkinter import W
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -313,19 +314,23 @@ def search_around_poly(binary_warped, left_fit, right_fit):
 # result = search_around_poly(binary_warped)
 
 
-def draw_rectangle(image, left_eqn, right_eqn):
-    line_image = np.copy(image)*0  # creating a blank to draw lines on
-    XX, YY = np.meshgrid(
-        np.arange(0, image.shape[1]), np.arange(0, image.shape[0]))
-    region_thresholds = (YY > (left_eqn[0]*YY**2 + left_eqn[1]*YY + left_eqn[2])) & \
-                        (XX > (left_eqn[0]*YY**2 + left_eqn[1]*YY + left_eqn[2])) & \
-                        (YY < (right_eqn[0]*YY**2 + right_eqn[1]*YY + right_eqn[2])) & \
-                        (XX < (right_eqn[0]*YY**2 +
-                         right_eqn[1]*YY + right_eqn[2]))
+def draw_rectangle(image,left_eqn,right_eqn):
+    line_image = np.copy(image)*0 # creating a blank to draw lines on
+    #ploty = np.linspace(0, image.shape[0]-1, image.shape[0])
+    XX, YY = np.meshgrid(np.arange(0, image.shape[1]), np.arange(0, image.shape[0]))
+    region_thresholds = (XX < (right_eqn[0]*YY**2 + right_eqn[1]*YY + right_eqn[2])) & \
+                        (XX > (left_eqn[0]*YY**2 + left_eqn[1]*YY + left_eqn[2])) #& \
+                        #(YY < (right_eqn[0]*YY**2 + right_eqn[1]*YY + right_eqn[2])) & \
+                        #(YY > (left_eqn[0]*YY**2 + left_eqn[1]*YY + left_eqn[2])) 
 
-    line_image[region_thresholds] = (0xb9, 0xff, 0x99)  # dcffcc
+    line_image[region_thresholds] = (0xb9,0xff,0x99) #dcffcc
     return line_image
 
+def rescaleFrame(frame, scale = 0.75):
+    height = int(frame.shape[0] * scale)
+    width = int(frame.shape[1] * scale)
+
+    return cv.resize(frame, (width, height), interpolation=cv.INTER_AREA)
 
 # apply the function on videos
 # capture is instance of the videocapture class that contains the video given
@@ -366,18 +371,34 @@ while True:
     output = binarization_choice2(frame)
     warped = transform(output, m)
     # warped = transform(frame,m)
-    output, left_eqn, right_eqn = search_around_poly(
+    output_poly, left_eqn, right_eqn = search_around_poly(
         warped, left_eqn, right_eqn)
     first_time, left_eqn, right_eqn = fit_polynomial(warped)
     rectangle = draw_rectangle(frame, left_eqn, right_eqn)
     correct_rectangle = transform(rectangle, minv)
-    transformed_back = transform(output, minv)
+    transformed_back = transform(output_poly, minv)
     first_stack = cv.addWeighted(transformed_back, 0.5, frame, 1, 0)
     # cv2.imshow('Video', cv.addWeighted(
     #     first_stack, 1, correct_rectangle, 0.7, 0))
     write_frame = cv.addWeighted(first_stack, 1, correct_rectangle, 0.7, 0)
     if debugging:
-        # TODO (Debugging mode)
+        output = rescaleFrame(output, 0.5)
+        output = cv.cvtColor(output, cv.COLOR_GRAY2BGR)
+        warped = rescaleFrame(warped, 0.5)
+        warped = cv.cvtColor(warped, cv.COLOR_GRAY2BGR)
+        output_poly = rescaleFrame(output_poly, 0.5)
+        
+        write_frame = rescaleFrame(write_frame, 0.5)
+        
+        wider_frame = frame * 0
+        wider_frame[0:wider_frame.shape[0] // 2, 0 : wider_frame.shape[1] // 2] = output
+        # [0, 1]
+        wider_frame[0:wider_frame.shape[0] // 2, wider_frame.shape[1] // 2 : wider_frame.shape[1]] = warped
+        # [1, 0]
+        wider_frame[wider_frame.shape[0] // 2: wider_frame.shape[0], 0 : wider_frame.shape[1] // 2] = output_poly
+        # [1, 1]
+        wider_frame[wider_frame.shape[0] // 2: wider_frame.shape[0], wider_frame.shape[1] // 2 : wider_frame.shape[1]] = write_frame
+
         pass
         # writer.write(The big frame contains the step, refer to the one I used in HP tuner selected)
     else:
