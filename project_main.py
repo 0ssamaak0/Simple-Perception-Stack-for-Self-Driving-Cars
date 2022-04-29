@@ -314,19 +314,22 @@ def search_around_poly(binary_warped, left_fit, right_fit):
 # result = search_around_poly(binary_warped)
 
 
-def draw_rectangle(image,left_eqn,right_eqn):
-    line_image = np.copy(image)*0 # creating a blank to draw lines on
+def draw_rectangle(image, left_eqn, right_eqn):
+    line_image = np.copy(image)*0  # creating a blank to draw lines on
     #ploty = np.linspace(0, image.shape[0]-1, image.shape[0])
-    XX, YY = np.meshgrid(np.arange(0, image.shape[1]), np.arange(0, image.shape[0]))
+    XX, YY = np.meshgrid(
+        np.arange(0, image.shape[1]), np.arange(0, image.shape[0]))
     region_thresholds = (XX < (right_eqn[0]*YY**2 + right_eqn[1]*YY + right_eqn[2])) & \
-                        (XX > (left_eqn[0]*YY**2 + left_eqn[1]*YY + left_eqn[2])) #& \
-                        #(YY < (right_eqn[0]*YY**2 + right_eqn[1]*YY + right_eqn[2])) & \
-                        #(YY > (left_eqn[0]*YY**2 + left_eqn[1]*YY + left_eqn[2])) 
+                        (XX > (left_eqn[0]*YY**2 +
+                         left_eqn[1]*YY + left_eqn[2]))  # & \
+    # (YY < (right_eqn[0]*YY**2 + right_eqn[1]*YY + right_eqn[2])) & \
+    #(YY > (left_eqn[0]*YY**2 + left_eqn[1]*YY + left_eqn[2]))
 
-    line_image[region_thresholds] = (0xb9,0xff,0x99) #dcffcc
+    line_image[region_thresholds] = (0xb9, 0xff, 0x99)  # dcffcc
     return line_image
 
-def rescaleFrame(frame, scale = 0.75):
+
+def rescaleFrame(frame, scale=0.75):
     height = int(frame.shape[0] * scale)
     width = int(frame.shape[1] * scale)
 
@@ -337,6 +340,7 @@ def rescaleFrame(frame, scale = 0.75):
 
 # input_path = 'project_video_Trim.mp4'
 # output_path = "filename_002.mp4"
+
 
 input_path = sys.argv[1]
 output_path = sys.argv[2]
@@ -366,7 +370,8 @@ i = 0
 while True:
     isTrue, frame = capture.read()
     if not isTrue:
-        print(f"\n the output video have been saved to {output_path} successfully")
+        print(
+            f"\n the output video have been saved to {output_path} successfully")
         break
     output = binarization_choice2(frame)
     warped = transform(output, m)
@@ -387,18 +392,23 @@ while True:
         warped = rescaleFrame(warped, 0.5)
         warped = cv.cvtColor(warped, cv.COLOR_GRAY2BGR)
         output_poly = rescaleFrame(output_poly, 0.5)
-        
-        write_frame = rescaleFrame(write_frame, 0.5)
-        
-        wider_frame = frame * 0
-        wider_frame[0:wider_frame.shape[0] // 2, 0 : wider_frame.shape[1] // 2] = output
-        # [0, 1]
-        wider_frame[0:wider_frame.shape[0] // 2, wider_frame.shape[1] // 2 : wider_frame.shape[1]] = warped
-        # [1, 0]
-        wider_frame[wider_frame.shape[0] // 2: wider_frame.shape[0], 0 : wider_frame.shape[1] // 2] = output_poly
-        # [1, 1]
-        wider_frame[wider_frame.shape[0] // 2: wider_frame.shape[0], wider_frame.shape[1] // 2 : wider_frame.shape[1]] = write_frame
 
+        write_frame = rescaleFrame(write_frame, 0.5)
+
+        wider_frame = frame * 0
+        wider_frame[0:wider_frame.shape[0] // 2,
+                    0: wider_frame.shape[1] // 2] = output
+        # [0, 1]
+        wider_frame[0:wider_frame.shape[0] // 2,
+                    wider_frame.shape[1] // 2: wider_frame.shape[1]] = warped
+        # [1, 0]
+        wider_frame[wider_frame.shape[0] // 2: wider_frame.shape[0],
+                    0: wider_frame.shape[1] // 2] = output_poly
+        # [1, 1]
+        wider_frame[wider_frame.shape[0] // 2: wider_frame.shape[0],
+                    wider_frame.shape[1] // 2: wider_frame.shape[1]] = write_frame
+
+        writer.write(wider_frame)
         pass
         # writer.write(The big frame contains the step, refer to the one I used in HP tuner selected)
     else:
