@@ -70,7 +70,7 @@ after scaling the training set, we have trained an [SVM](https://github.com/0ssa
 the SVM function returns the **trained model** and the **scaler** to scale the test images later
 
 
-### 5.Pickling!
+### 5.Pickling
 after training the model successfully, we pickled the results to use them later in testing without retraining each time
 ```python
 svc, X_scaler = SVM(car_features, notcar_features)
