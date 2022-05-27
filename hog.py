@@ -15,8 +15,8 @@ from SVM import *
 cars = []
 notcars = []
 
-cars_path = glob.glob('smaller/vehicles/*/*.jpeg')
-notcars_path = glob.glob('smaller/non-vehicles/*/*.jpeg')
+cars_path = glob.glob('vehicles/*/*.jpeg')
+notcars_path = glob.glob('non-vehicles/*/*.jpeg')
 
 for image in notcars_path:
     notcars.append(image)

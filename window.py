@@ -7,7 +7,7 @@ from scipy.ndimage.measurements import label
 def slide_window(img, x_start_stop=[None, None], y_start_stop=[None, None],
                  xy_window=(64, 64), xy_overlap=(0.5, 0.5)):
 
-    # If x and/or y start/stop positions not defined, set to image size
+    # default size = image size
     if x_start_stop[0] == None:
         x_start_stop[0] = 0
     if x_start_stop[1] == None:
@@ -66,13 +66,14 @@ def search_windows(img, windows, clf, scaler, hist_bins=32, orient=9,
     on_windows = []
     # 2) Iterate over all windows in the list
     for window in windows:
-        # 3) Extract the test window from original image
+        # 3) Extract the test window from original image and resize to the training image size
         test_img = cv2.resize(img[window[0][1]:window[1][1], window[0][0]:window[1][0]], (64, 64))
-        # 4) Extract features for that window using single_img_features()
+        # 4) Extract features for that window using single_img_features(), same as extract_features but for 1 image
         features = single_img_features(test_img,
                                        hist_bins=hist_bins,
                                        orient=orient, pix_per_cell=pix_per_cell,
                                        cell_per_block=cell_per_block)
+
         # 5) Scale extracted features to be fed to classifier
         test_features = scaler.transform(np.array(features).reshape(1, -1))
         # 6) Predict using your classifier
@@ -84,13 +85,23 @@ def search_windows(img, windows, clf, scaler, hist_bins=32, orient=9,
     return on_windows
 
 
+""" making a heatmap of the detected objects, then thresholds the number of windows, returns the labels tuple that contains the positions of the objects"""
+
+
 def heatmap_thresh(img, bbox_list, threshold):
+    # empty image
     heatmap = np.zeros_like(img[:, :, 0])
     for box in bbox_list:
+        # 1's in the objects places
         heatmap[box[0][1]:box[1][1], box[0][0]:box[1][0]] += 1
+        # thresholding to remove false positives
     heatmap[heatmap <= threshold] = 0
+    # tuple of 2 elements that contains the positions of objects and the number of objects
     labels = label(heatmap)
     return labels
+
+
+""" draws boxes in the elements higher than the threshold """
 
 
 def draw_labeled_bboxes(img, labels):
