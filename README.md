@@ -45,7 +45,7 @@ using [extract_features()](https://github.com/0ssamaak0/Simple-Perception-Stack-
 the [extract_features()](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/2459aa39a461406a2f2df4b045532e8c6bfafec3/features_functions.py#L70) function takes the **image_list** we have prepared previously and the determined parameters as following
 
 ```python
-features = extract_features(**image_list**, hist_bins=hist_bins, orient=orient, pix_per_cell=pix_per_cell, cell_per_block=cell_per_block)
+features = extract_features(image_list, hist_bins=hist_bins, orient=orient, pix_per_cell=pix_per_cell, cell_per_block=cell_per_block)
 ``` 
 #### 1.hog features
 using [get_hog_features()](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/2459aa39a461406a2f2df4b045532e8c6bfafec3/features_functions.py#L9) and we have chosen to get the hog features of the three RGB Channels.
