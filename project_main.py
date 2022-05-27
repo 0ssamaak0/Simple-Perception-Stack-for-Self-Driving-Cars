@@ -66,11 +66,6 @@ while i < frame_count:
         print(
             f"\n the output video have been saved to {output_path} successfully")
         break
-<< << << < HEAD
-
-== == == =
-
->>>>>> > 07a0413c6b34cf0520dd7c10e33236f8ad59f093
 # warped = transform(frame,m)
 # ------------------------------
 # apply the function on videos
