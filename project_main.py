@@ -66,29 +66,26 @@ while i < frame_count:
         print(
             f"\n the output video have been saved to {output_path} successfully")
         break
-# warped = transform(frame,m)
-# ------------------------------
-# apply the function on videos
 
-output = binarization_choice2(frame)
-BC2 = threshold(frame)
+    # warped = transform(frame,m)
+    # ------------------------------
+    # apply the function on videos
 
-warped = transform(output, m)
-output_2, left_eqn, right_eqn, ploty = search_around_poly(warped, left_eqn, right_eqn)
-<< << << < HEAD
+    output = binarization_choice2(frame)
+    BC2 = threshold(frame)
 
-== == == =
+    warped = transform(output, m)
+    output_2, left_eqn, right_eqn, ploty = search_around_poly(warped, left_eqn, right_eqn)
 
->>>>>> > 07a0413c6b34cf0520dd7c10e33236f8ad59f093
-curve = measure_curvature_pixels(left_eqn, right_eqn)
-first_time, left_eqn, right_eqn = fit_polynomial(warped)
-rectangle = draw_rectangle(frame, left_eqn, right_eqn)
-transformed_back = transform(output_2, minv)
-correct_rectangle = transform(rectangle, minv)
- cv.putText(frame, "curvature: {} m".format(curve), (255, 255), cv.FONT_ITALIC, 1.0, (255, 255, 255), 2)
-  write_frame = cv.addWeighted(correct_rectangle, 0.5, frame, 1, 0)
+    curve = measure_curvature_pixels(left_eqn, right_eqn)
+    first_time, left_eqn, right_eqn = fit_polynomial(warped)
+    rectangle = draw_rectangle(frame, left_eqn, right_eqn)
+    transformed_back = transform(output_2, minv)
+    correct_rectangle = transform(rectangle, minv)
+    cv.putText(frame, "curvature: {} m".format(curve), (255, 255), cv.FONT_ITALIC, 1.0, (255, 255, 255), 2)
+    write_frame = cv.addWeighted(correct_rectangle, 0.5, frame, 1, 0)
 
-   if debugging:
+    if debugging:
         first_time = rescaleFrame(first_time, 0.5)
         output = rescaleFrame(output, 0.5)
         warped = rescaleFrame(warped, 0.5)
