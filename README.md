@@ -57,11 +57,11 @@ hog_features.append(get_hog_features(feature_image[:, :, channel],
                                 orient, pix_per_cell, cell_per_block,
                                 vis=False, feature_vec=True))
 ```
-![hog_image]([hog_image_path](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/main/Images/hog_image.png))
+![hog_image](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/master/Images/color_hist.png)
 #### color histogram features
 we use [color_hist()](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/2459aa39a461406a2f2df4b045532e8c6bfafec3/features_functions.py#L26) function to get the RGB histograms of the image, the function returns them concatenated into single array
 
-![color_hist]([color_hist_path](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/52f57b37dd66791e850bcb2a7d9291eff8cc96d0/Images/color_hist.png))
+![color_hist]((https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/52f57b37dd66791e850bcb2a7d9291eff8cc96d0/Images/color_hist.png))
 
 ### Training the model
 
