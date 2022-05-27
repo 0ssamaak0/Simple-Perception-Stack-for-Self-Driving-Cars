@@ -54,6 +54,7 @@ BC2 = threshold(frame)
 warped, m, minv = per_transform(output)
 
 first_time, left_eqn, right_eqn = fit_polynomial(warped)
+rectangle = draw_rectangle(frame,left_eqn,right_eqn)
 
 i = 0
 save = i
@@ -65,7 +66,7 @@ while i < frame_count:
         print(
             f"\n the output video have been saved to {output_path} successfully")
         break
-    warped = transform(output, m)
+    
     # warped = transform(frame,m)
     # ------------------------------
     # apply the function on videos
@@ -73,14 +74,9 @@ while i < frame_count:
     output = binarization_choice2(frame)
     BC2 = threshold(frame)
 
-    warped, m, minv = per_transform(output)
-    first_time, left_eqn, right_eqn = fit_polynomial(warped)
-    rectangle = draw_rectangle(frame, left_eqn, right_eqn)
-    isTrue, frame = capture.read()
-    #output = threshold(frame)
     warped = transform(output, m)
-    #warped = transform(frame,m)
     output_2, left_eqn, right_eqn, ploty = search_around_poly(warped, left_eqn, right_eqn)
+    
     curve = measure_curvature_pixels(left_eqn, right_eqn)
     first_time, left_eqn, right_eqn = fit_polynomial(warped)
     rectangle = draw_rectangle(frame, left_eqn, right_eqn)
