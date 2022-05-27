@@ -94,7 +94,7 @@ The image is now divided into windows (will be used later to search within)
 
 
 ### 2.Searching within the window
-we pass each window list to [search_windows()](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/25a4ace846b4baa1e2e98c960eb7dc371cf23eb2/window.py#L62) function, then we resize the test image to match the training images size, and use [single_img_features](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/2459aa39a461406a2f2df4b045532e8c6bfafec3/features_functions.py#L96) to extract the same features extracted from the training images
+we pass each window list to [search_windows()](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/25a4ace846b4baa1e2e98c960eb7dc371cf23eb2/window.py#L62) function, then we resize the test image to match the training images size, and use [single_img_features()](https://github.com/0ssamaak0/Simple-Perception-Stack-for-Self-Driving-Cars/blob/2459aa39a461406a2f2df4b045532e8c6bfafec3/features_functions.py#L96) to extract the same features extracted from the training images
 
 we use the **classifier** and the **scaler** to test the image, if the prediction is 1, we append this window and return it
 
